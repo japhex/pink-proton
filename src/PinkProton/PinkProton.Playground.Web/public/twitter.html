@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>[TWITTER]</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="//cdn.socket.io/socket.io-1.3.4.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var socket = io('http://localhost:8181');
+            socket.on('tweet', function (data) {
+                console.log(data);
+                var tweet = $('#tweet').val(data);
+                var date = new Date();
+                var occurredAt = $('#occurred-at').html(date.toUTCString());
+            });
+
+            var go = $('#go').click(function (e) {
+                var track = $('#track').val();
+                console.log('track: ' + track);
+                socket.emit('track', track);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>[TWITTER]</h1>
+        <h2>[statuses/filter]</h2>
+
+        <form class="form-inline" style="margin: 10px 0 10px 0;">
+            <input class="form-control input-lg" type="text" placeholder="track" id="track" value="nodejs" />
+            <button type="button" class="btn btn-default input-lg" id="go">Go!</button>
+        </form>
+
+        <div id="occurred-at"></div>
+        <textarea id="tweet" rows="10" cols="50"></textarea>
+    </div>
+</body>
+</html>
